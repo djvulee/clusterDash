@@ -13,7 +13,6 @@ from datetime import datetime
 from net import NetIOCounters, get_interface_addresses
 
 import psutil
-import datetime
 import socket
 import os
 import platform
