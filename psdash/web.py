@@ -25,7 +25,7 @@ logger = logging.getLogger("psdash.web")
 
 def socket_constants(prefix):
     return dict((getattr(socket, n), n) for n in dir(socket) if n.startswith(prefix))
-    
+
 socket_families = socket_constants('AF_')
 socket_types = socket_constants('SOCK_')
 
@@ -323,6 +323,10 @@ def enable_verbose_logging():
 
 
 def main():
+    setup_logging()
+
+    locale.setlocale(locale.LC_ALL, "")
+
     args = parse_args()
     if args.debug:
         enable_verbose_logging()
