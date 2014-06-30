@@ -41,7 +41,7 @@ def main():
 
     start_background_worker()
     wrapService = WrapService(net_io_counters)
-    s = ThreadedServer(wrapService)
+    s = ThreadedServer(wrapService, port=5050)
     s.start()
 
 main()
