@@ -9,9 +9,11 @@ from rpyc.utils.server import ThreadedServer
 from dash_service import WrapService
 
 from net import NetIOCounters
+from log import Logs
 import threading
 import time
 
+logs = Logs()
 net_io_counters = NetIOCounters()
 
 def start_background_worker(sleep_time=3):

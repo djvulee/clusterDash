@@ -21,7 +21,7 @@ import copy
 
 
 
-def WrapService(net_io_counters):
+def WrapService(net_io_counters, logs):
     class DashService(Service):
         def get_disk(self, all_partitions=False):
             disks = [ (dp, psutil.disk_usage(dp.mountpoint)) for dp in psutil.disk_partitions(all_partitions) ]
