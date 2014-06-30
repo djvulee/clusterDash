@@ -8,14 +8,16 @@ This is the basic defined services
 
 from rpyc import Service
 
+from datetime import datetime
 
 from net import NetIOCounters, get_interface_addresses
 
 import psutil
-import datetime
 import socket
 import os
 import platform
+
+import copy
 
 
 
@@ -167,8 +169,8 @@ def WrapService(net_io_counter):
             disks = self.exposed_get_disk()
             users = self.exposed_get_user()
 
-            #netifs = self.get_network_interfaces()
-            #netifs.sort(key=lambda x: x.get("bytes_sent"), reverse=True)
+            netifs = self.get_network_interface()
+            netifs.sort(key=lambda x: x.get("bytes_sent"), reverse=True)
 
             data = {
                     "os": platform.platform().decode("utf-8"),
@@ -181,11 +183,11 @@ def WrapService(net_io_counter):
                     "disks": disks,
                     "cpu_percent": psutil.cpu_times_percent(0),
                     "users": users,
-                    #"net_interfaces": netifs,
+                    "net_interfaces": netifs,
                     "page": "overview",
             }
 
-            return data
+            return copy.deepcopy(data)
 
         def exposed_get_logs(self):
             available_logs = []

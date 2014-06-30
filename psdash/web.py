@@ -149,8 +149,15 @@ def access_denied(e):
 @psdashapp.route("/")
 def index():
     tmp = dash_client.get_overviews()[0]
+
     #the following is the right thing, we should get all the info
     #tmp = dash_client.get_overviews()
+
+    for key in tmp.items():
+        print(key)
+        #print(key + " => " + tmp[key])
+
+    print(tmp["vmem"])
 
     data = {
         "os": tmp["os"],
@@ -163,6 +170,7 @@ def index():
         "disks": tmp["disks"],
         "cpu_percent": tmp["cpu_percent"],
         "users": tmp["users"],
+        "net_interfaces": tmp["netifs"],
         "page": "overview",
         "is_xhr": request.is_xhr
     }
