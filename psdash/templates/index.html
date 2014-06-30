@@ -1,3 +1,4 @@
+{% if not is_xhr|default(false) %}{% extends "base.html" %}{% endif -%}
 {% block content %}
     <div id="overview">
         <div class="row">
@@ -80,6 +81,26 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading"><span class="glyphicon glyphicon-record"></span> Memory</div>
                     <table class="memory table table-striped table-bordered">
+                        <tr>
+                            <td class="label-col">Total</td>
+                            <td class="total">{{ vmem.total|filesizeformat }}</td>
+                        </tr>
+                        <tr>
+                            <td class="label-col">Available</td>
+                            <td class="available">{{ vmem.available|filesizeformat }}</td>
+                        </tr>
+                        <tr>
+                            <td class="label-col">Used <small>(excl. cache &amp; buffers)</small></td>
+                            <td class="used_excl">{{ (vmem.total - vmem.available)|filesizeformat }} ({{ vmem.percent }} %)</td>
+                        </tr>
+                        <tr>
+                            <td class="label-col">Used <small>(incl. cache &amp; buffers)</small></td>
+                            <td class="used_incl">{{ vmem.used|filesizeformat }}</td>
+                        </tr>
+                        <tr>
+                            <td class="label-col">Free</td>
+                            <td class="free">{{ vmem.free|filesizeformat }}</td>
+                        </tr>
                     </table>
                 </div>
             </div>
@@ -87,6 +108,26 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading"><span class="glyphicon glyphicon-import"></span> Swap</div>
                     <table class="swap table table-striped table-bordered">
+                        <tr>
+                            <td class="label-col">Total</td>
+                            <td class="total">{{ swap.total|filesizeformat }}</td>
+                        </tr>
+                        <tr>
+                            <td class="label-col">Used</td>
+                            <td class="used">{{ swap.used|filesizeformat }} ({{ swap.percent }} %)</td>
+                        </tr>
+                        <tr>
+                            <td class="label-col">Free</td>
+                            <td class="free">{{ swap.free|filesizeformat }}</td>
+                        </tr>
+                        <tr>
+                            <td class="label-col">Swapped in</td>
+                            <td class="swapped-in">{{ swap.sin|filesizeformat }}</td>
+                        </tr>
+                        <tr>
+                            <td class="label-col">Swapped out</td>
+                            <td class="swapped-out">{{ swap.sout|filesizeformat }}</td>
+                        </tr>
                     </table>
                 </div>
             </div>
@@ -104,6 +145,16 @@
                                 <th>TX/s</th>
                             </tr>
                         </thead>
+                        <tbody>
+                            {% for ni in net_interfaces %}
+                                <tr>
+                                    <td>{{ ni.name }}</td>
+                                    <td>{{ ni.ip }}</td>
+                                    <td>{{ ni.rx_per_sec|default(0)|filesizeformat }}</td>
+                                    <td>{{ ni.tx_per_sec|default(0)|filesizeformat }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -121,6 +172,15 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {% for part, usage in disks %}
+                                <tr>
+                                    <td>{{ part.device }}</td>
+                                    <td>{{ part.mountpoint.decode("utf-8") }}</td>
+                                    <td>{{ usage.total|filesizeformat }}</td>
+                                    <td>{{ usage.used|filesizeformat }} ({{ usage.percent }} %)</td>
+                                    <td>{{ usage.free|filesizeformat }}</td>
+                                </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
