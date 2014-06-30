@@ -21,7 +21,7 @@ import copy
 
 
 
-def WrapService(net_io_counter):
+def WrapService(net_io_counters):
     class DashService(Service):
         def get_disk(self, all_partitions=False):
             disks = [ (dp, psutil.disk_usage(dp.mountpoint)) for dp in psutil.disk_partitions(all_partitions) ]
@@ -169,7 +169,7 @@ def WrapService(net_io_counter):
             disks = self.exposed_get_disk()
             users = self.exposed_get_user()
 
-            netifs = self.get_network_interface()
+            netifs = self.exposed_get_network_interface()
             netifs.sort(key=lambda x: x.get("bytes_sent"), reverse=True)
 
             data = {
