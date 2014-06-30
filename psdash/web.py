@@ -153,12 +153,6 @@ def index():
     #the following is the right thing, we should get all the info
     #tmp = dash_client.get_overviews()
 
-    for key in tmp.items():
-        print(key)
-        #print(key + " => " + tmp[key])
-
-    print(tmp["vmem"])
-
     data = {
         "os": tmp["os"],
         "hostname": tmp["hostname"],
@@ -170,7 +164,7 @@ def index():
         "disks": tmp["disks"],
         "cpu_percent": tmp["cpu_percent"],
         "users": tmp["users"],
-        "net_interfaces": tmp["netifs"],
+        "net_interfaces": tmp["net_interfaces"],
         "page": "overview",
         "is_xhr": request.is_xhr
     }
