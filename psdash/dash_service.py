@@ -166,7 +166,7 @@ def WrapService(net_io_counters):
         def exposed_get_overview(self):
             load_avg = os.getloadavg()
             uptime = datetime.now() - datetime.fromtimestamp(psutil.boot_time())
-            disks = self.exposed_get_disk()
+            disks = self.get_disk()
             users = self.exposed_get_user()
 
             netifs = self.exposed_get_network_interface()
