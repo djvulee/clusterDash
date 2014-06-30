@@ -58,7 +58,7 @@ class Client():
     def get_networks(self):
         nets = []
         for con in self.conns:
-            net = con.root.get_net()
+            net = con.root.get_network()
             nets.append(net)
 
         return nets
