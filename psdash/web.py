@@ -19,29 +19,19 @@ from client import Client
 import collections
 
 logs = Logs()
+
 net_io_counters = NetIOCounters()
 logger = logging.getLogger("psdash.web")
 
-
-#dash_client = Client(["192.168.35.8", 5050])
-dash_client = Client([["husky003", 5050]])
-
-
-
-def get_process_environ(pid):
-    with open("/proc/%d/environ" % pid) as f:
-        contents = f.read()
-        env_vars = dict(row.split("=") for row in contents.split("\0") if "=" in row)
-
-    return env_vars
-
-
 def socket_constants(prefix):
     return dict((getattr(socket, n), n) for n in dir(socket) if n.startswith(prefix))
-
-
+    
 socket_families = socket_constants('AF_')
 socket_types = socket_constants('SOCK_')
+
+
+dash_client = Client([["husky003", 5050]])
+
 
 app = Flask(__name__)
 app.config.from_envvar("PSDASH_CONFIG", silent=True)
@@ -159,6 +149,8 @@ def access_denied(e):
 @psdashapp.route("/")
 def index():
     tmp = dash_client.get_overviews()[0]
+    #the following is the right thing, we should get all the info
+    #tmp = dash_client.get_overviews()
 
     data = {
         "os": tmp["os"],
@@ -177,14 +169,44 @@ def index():
 
     return render_template("index.html", **data)
 
+@psdashapp.route("/processes", defaults={"sort": "cpu", "order": "desc"})
+@psdashapp.route("/processes/<string:sort>")
+@psdashapp.route("/processes/<string:sort>/<string:order>")
+def processes(sort="pid", order="asc"):
+    (procs, sort, order) = dash_client.get_processes()[0]
+
+    return render_template(
+        "processes.html",
+        processes=procs,
+        sort=sort,
+        order=order,
+        page="processes",
+        is_xhr=request.is_xhr
+    )
+
+@psdashapp.route("/process/<int:pid>/limits")
+def process_limits(pid):
+    (limits, p) = dash_client.get_process_limits()[0]
+
+    return render_template(
+        "process/limits.html",
+        limits=limits,
+        process=p,
+        section="limits",
+        page="processes",
+        is_xhr=request.is_xhr
+    )
+
+@psdashapp.route("/process/<int:pid>", defaults={"section": "overview"})
+@psdashapp.route("/process/<int:pid>/<string:section>")
+def process(pid, section):
+    context = dash_client.get_process(section)[0]
+
+    return render_template("process/%s.html" % section, **context)
 
 @psdashapp.route("/network")
 def view_networks():
-    netifs = get_network_interfaces()
-    netifs.sort(key=lambda x: x.get("bytes_sent"), reverse=True)
-
-    conns = psutil.net_connections()
-    conns.sort(key=lambda x: x.status)
+    (netifs, conns) = dash_client.get_networks()[0]
 
     return render_template(
         "network.html",
@@ -199,9 +221,8 @@ def view_networks():
 
 @psdashapp.route("/disks")
 def view_disks():
-    disks = get_disks(all_partitions=True)
-    io_counters = psutil.disk_io_counters(perdisk=True).items()
-    io_counters.sort(key=lambda x: x[1].read_count, reverse=True)
+    (disks, io_counters) = dash_client.get_disks()[0]
+
     return render_template(
         "disks.html",
         page="disks",
@@ -209,6 +230,41 @@ def view_disks():
         io_counters=io_counters,
         is_xhr=request.is_xhr
     )
+
+@psdashapp.route("/logs")
+def view_logs():
+    logs = dash_client.get_logs()[0]
+
+    return render_template(
+        "logs.html",
+        page="logs",
+        logs=available_logs,
+        is_xhr=request.is_xhr
+    )
+
+@psdashapp.route("/log")
+def view_log():
+    (content, filename) = dash_client.get_log()[0]
+
+    return render_template("log.html", content=content, filename=filename)
+
+@psdashapp.route("/log/read")
+def read_log():
+    read_log = dash_client.get_read_log()[0]
+
+    return read_log
+
+@psdashapp.route("/log/read_tail")
+def read_log_tail():
+    read_log_tail = dash_client.get_read_log_tail[0]
+
+    return read_log_tail
+
+@psdashapp.route("/log/search")
+def search_log():
+    search_log = dash_client.get_search_log[0]
+
+    return search_log
 
 
 def parse_args():
@@ -251,26 +307,6 @@ def parse_args():
     return parser.parse_args()
 
 
-def start_background_worker(args, sleep_time=3):
-    def work():
-        update_logs_interval = 60
-        i = update_logs_interval
-        while True:
-            net_io_counters.update()
-
-            # update the list of available logs every minute
-            if update_logs_interval <= 0:
-                logs.add_patterns(args.logs)
-                i = update_logs_interval
-            i -= sleep_time
-
-            time.sleep(sleep_time)
-
-    t = threading.Thread(target=work)
-    t.daemon = True
-    t.start()
-
-
 def setup_logging():
     logging.basicConfig(
         level=logging.INFO,
@@ -287,19 +323,11 @@ def enable_verbose_logging():
 
 
 def main():
-    setup_logging()
-
-    logger.info("Starting psdash v0.3.0")
-
-    # This set locale to the user default (usually controlled by the LANG env var)
-    locale.setlocale(locale.LC_ALL, "")
-
     args = parse_args()
     if args.debug:
         enable_verbose_logging()
 
     logs.add_patterns(args.logs)
-    start_background_worker(args)
 
     logger.info("Listening on %s:%s", args.bind_host, args.port)
 

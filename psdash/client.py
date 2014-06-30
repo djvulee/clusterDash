@@ -1,8 +1,5 @@
 # coding=utf-8
 
-
-
-
 import rpyc
 
 
@@ -18,6 +15,29 @@ class Client():
             c = rpyc.connect(server[0], server[1])
             self.conns.append(c)
 
+    def get_processes(self):
+        processes = []
+        for con in self.conns:
+            process = con.root.get_processes()
+            processes.append(process)
+
+        return processes
+
+    def get_process_limits(self):
+        process_limits = []
+        for con in self.conns:
+            process_limit = con.root.get_process_limits()
+            process_limits.append(process_limit)
+
+        return process_limits
+
+    def get_process(self, section):
+        sec_processes = []
+        for con in self.conns:
+            sec_process = con.root.get_processes(section)
+            sec_processes.append(sec_process)
+
+        return sec_processes
 
     def get_disks(self):
         disks = []
@@ -26,7 +46,6 @@ class Client():
             disks.append(disk)
 
         return disks
-
 
     def get_cpus(self):
         cpus = []
@@ -37,7 +56,12 @@ class Client():
         return cpus
 
     def get_networks(self):
-        pass
+        nets = []
+        for con in self.conns:
+            net = con.root.get_net()
+            nets.append(net)
+
+        return nets
 
     def get_mems(self):
         mems = []
@@ -55,6 +79,51 @@ class Client():
             overviews.append(overview)
 
         return overviews
+
+    def get_logs(self):
+        logs = []
+
+        for con in self.conns:
+            log = con.root.get_logs()
+            logs.append(log)
+
+        return logs
+
+    def get_log(self):
+        single_logs = []
+
+        for con in self.conns:
+            log = con.root.get_log()
+            single_logs.append(log)
+
+        return single_logs
+
+    def get_read_log(self):
+        read_logs = []
+
+        for con in self.conns:
+            log = con.root.get_read_log()
+            read_logs.append(log)
+
+        return read_logs
+
+    def get_read_log_tail(self):
+        read_log_tails = []
+
+        for con in self.conns:
+            log = con.root.get_read_log_tail()
+            read_log_tails.append(log)
+
+        return read_log_tails
+
+    def get_search_log(self):
+        search_logs = []
+
+        for con in self.conns:
+            log = con.root.get_search_log()
+            search_logs.append(log)
+
+        return search_logs
 
     def stop(self):
         for con in self.conns:
