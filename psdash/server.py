@@ -5,12 +5,16 @@ This is the server who worker on a lot of machine, it will get a remote call fro
 """
 
 
-from rpyc.utils.server import TheadedServer
+from rpyc.utils.server import ThreadedServer
 from dash_service import WrapService
+
+from net import NetIOCounters
+import threading
+import time
 
 net_io_counters = NetIOCounters()
 
-def start_background_worker(args, sleep_time=3):
+def start_background_worker(sleep_time=3):
     def work():
         update_logs_interval = 60
         i = update_logs_interval
@@ -19,7 +23,7 @@ def start_background_worker(args, sleep_time=3):
 
             # update the list of available logs every minute
             if update_logs_interval <= 0:
-                logs.add_patterns(args.logs)
+                #logs.add_patterns(args.logs)
                 i = update_logs_interval
             i -= sleep_time
 
@@ -30,14 +34,14 @@ def start_background_worker(args, sleep_time=3):
     t.start()
 
 def main():
-    setup_logging()
+    #setup_logging()
 
-    logger.info("Starting clusterdash v0.1.0")
-    locale.setlocale(locale.LC_ALL, "")
+    #logger.info("Starting clusterdash v0.1.0")
+    #locale.setlocale(locale.LC_ALL, "")
 
-    start_background_worker(args)
+    start_background_worker()
     wrapService = WrapService(net_io_counters)
-    s = TheadedServer(wrapService)
+    s = ThreadedServer(wrapService)
     s.start()
 
 main()
