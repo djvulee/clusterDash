@@ -126,14 +126,14 @@ def WrapService(net_io_counters, logs):
                 return "error"
 
             context = {
-                "process": psutil.Process(pid),
+                "process": psutil.Process(int(pid)),
                 "section": section,
                 "page": "processes",
                 "is_xhr": request.is_xhr
             }
 
             if section == "environment":
-                context["process_environ"] = self.get_process_environ(pid)
+                context["process_environ"] = self.get_process_environ(int(pid))
 
             return  context
 
