@@ -204,7 +204,11 @@ def process_limits(pid):
 def process(pid, section):
     context = dash_client.get_process(section)[0]
 
-    return render_template("process/%s.html" % section, **context)
+    if context == "error":
+        errmsg = "Invalid subsection when trying to view process %d" % pid
+        return render_template("error.html", error=errmsg), 404
+    else:
+        return render_template("process/%s.html" % section, **context)
 
 @psdashapp.route("/network")
 def view_networks():
@@ -248,7 +252,10 @@ def view_logs():
 def view_log():
     (content, filename) = dash_client.get_log()[0]
 
-    return render_template("log.html", content=content, filename=filename)
+    if content == "error":
+        return render_template("error.html", error="Only files passed through args are allowed."), 401
+    else:
+        return render_template("log.html", content=content, filename=filename)
 
 @psdashapp.route("/log/read")
 def read_log():

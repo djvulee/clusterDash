@@ -8,12 +8,17 @@ This is the server who worker on a lot of machine, it will get a remote call fro
 from rpyc.utils.server import ThreadedServer
 from dash_service import WrapService
 
+import argparse
+import logging
 from net import NetIOCounters
 from log import Logs
 import threading
 import time
+import locale
+
 
 logs = Logs()
+logger = logging.getLogger("psdash.web")
 net_io_counters = NetIOCounters()
 
 def parse_args():
@@ -55,6 +60,13 @@ def parse_args():
 
     return parser.parse_args()
 
+def setup_logging():
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(levelname)s | %(name)s | %(message)s"
+    )
+
+    logging.getLogger("werkzeug").setLevel(logging.WARNING)
 
 def start_background_worker(args, sleep_time=3):
     def work():
@@ -81,8 +93,9 @@ def main():
     logger.info("Starting server ...")
     locale.setlocale(locale.LC_ALL, "")
 
+    args = parse_args()
     start_background_worker(args)
-    wrapService = WrapService(net_io_counters)
+    wrapService = WrapService(net_io_counters, logs)
     s = ThreadedServer(wrapService, port=5050,  protocol_config={"allow_public_attrs":True})
     s.start()
 
