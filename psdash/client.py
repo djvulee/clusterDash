@@ -31,10 +31,10 @@ class Client():
 
         return process_limits
 
-    def get_process(self, section):
+    def get_process(self, pid, section):
         sec_processes = []
         for con in self.conns:
-            sec_process = con.root.get_processes(section)
+            sec_process = con.root.get_processes(pid, section)
             sec_processes.append(sec_process)
 
         return sec_processes
