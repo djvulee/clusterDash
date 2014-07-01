@@ -235,7 +235,7 @@ def view_disks():
 
 @psdashapp.route("/logs")
 def view_logs():
-    logs = dash_client.get_logs()[0]
+    available_logs = dash_client.get_logs()[0]
 
     return render_template(
         "logs.html",

@@ -123,8 +123,7 @@ def WrapService(net_io_counters, logs):
             ]
 
             if section not in valid_sections:
-                errmsg = "Invalid subsection when trying to view process %d" % pid
-                return render_template("error.html", error=errmsg), 404
+                return "error"
 
             context = {
                 "process": psutil.Process(pid),
@@ -225,7 +224,7 @@ def WrapService(net_io_counters, logs):
                 log.set_tail_position()
                 content = log.read()
             except KeyError:
-                return render_template("error.html", error="Only files passed through args are allowed."), 401
+                return ("error", "no such file")
 
             return (content, filename)
 
