@@ -133,7 +133,7 @@ def WrapService(net_io_counters, logs):
             }
 
             if section == "environment":
-                context["process_environ"] = get_process_environ(pid)
+                context["process_environ"] = self.get_process_environ(pid)
 
             return  context
 

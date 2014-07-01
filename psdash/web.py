@@ -202,12 +202,20 @@ def process_limits(pid):
 @psdashapp.route("/process/<int:pid>", defaults={"section": "overview"})
 @psdashapp.route("/process/<int:pid>/<string:section>")
 def process(pid, section):
-    context = dash_client.get_process(section)[0]
+    tmp_context = dash_client.get_process(section)[0]
 
-    if context == "error":
+    if tmp_context == "error":
         errmsg = "Invalid subsection when trying to view process %d" % pid
         return render_template("error.html", error=errmsg), 404
     else:
+        context = {
+            "process": tmp_context["process"],
+            "section": tmp_context["section"],
+            "page": "processes",
+            "is_xhr": request.is_xhr
+        }
+        if section == "environment":
+            context["process_environ"] = tmp_context["process_environ"]
         return render_template("process/%s.html" % section, **context)
 
 @psdashapp.route("/network")
