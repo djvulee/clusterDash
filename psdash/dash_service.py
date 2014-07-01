@@ -111,7 +111,7 @@ def WrapService(net_io_counters, logs):
 
             return (limits, p)
 
-        def exposed_get_process(self, section):
+        def exposed_get_process(self, pid, section):
             valid_sections = [
                 "overview",
                 "threads",
