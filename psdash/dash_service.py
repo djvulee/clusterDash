@@ -126,15 +126,14 @@ def WrapService(net_io_counters, logs):
                 return "error"
 
             context = {
-                "process": psutil.Process(int(pid)),
-                "section": section,
-                "page": "processes",
-                "is_xhr": request.is_xhr
+                "process": psutil.Process(pid),
+                "section": section
             }
 
             if section == "environment":
-                context["process_environ"] = self.get_process_environ(int(pid))
+                context["process_environ"] = self.get_process_environ(pid)
 
+            print(context["process"])
             return  context
 
         def exposed_get_user(self):
