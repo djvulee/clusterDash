@@ -16,12 +16,12 @@ class Client():
             if server[0] not in self.conns.keys():
                 self.conns[server[0]]= c
 
-    def get_hostname_processes(self, hostname):
+    def get_hostname_processes(self, hostname, sort, order):
         if hostname not in self.conns.keys():
             return "error"
 
         con = self.conns[hostname]
-        processes = con.root.get_processes()
+        processes = con.root.get_processes(sort, order)
 
         return processes
 

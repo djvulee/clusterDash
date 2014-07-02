@@ -56,7 +56,7 @@ def WrapService(net_io_counters, logs):
 
             return (netifs, conns)
 
-        def exposed_get_processes(self, sort="pid", order="asc"):
+        def exposed_get_processes(self, sort, order):
             procs = []
             for p in psutil.process_iter():
                 rss, vms = p.memory_info()
@@ -85,7 +85,7 @@ def WrapService(net_io_counters, logs):
                 reverse=True if order != "asc" else False
             )
 
-            return (procs, sort, order)
+            return procs
 
         def exposed_get_process_limits(self):
             p = psutil.Process(pid)
