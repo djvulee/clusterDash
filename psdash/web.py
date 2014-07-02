@@ -171,7 +171,7 @@ def index(hostname):
 @psdashapp.route("/<string:hostname>/processes/<string:sort>")
 @psdashapp.route("/<string:hostname>/processes/<string:sort>/<string:order>")
 def processes(hostname, sort="pid", order="asc"):
-    processes  = dash_client.get_hostname_processes(hostname)
+    processes  = dash_client.get_hostname_processes(hostname, sort, order)
 
     return render_template(
         "processes.html",
@@ -215,6 +215,7 @@ def process(hostname, pid, section):
         }
         if section == "environment":
             context["process_environ"] = tmp_context["process_environ"]
+
         return render_template("process/%s.html" % section, **context)
 
 @psdashapp.route("/<string:hostname>/network")
