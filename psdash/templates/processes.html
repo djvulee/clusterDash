@@ -12,39 +12,39 @@
             <thead>
                 <tr>
                     <th>
-                        <a href="{{ url_for(".processes", sort="pid", order=next_order) }}">PID</a>
+                        <a href="{{ url_for(".processes", hostname=hostname, sort="pid", order=next_order) }}">PID</a>
                         {{ order_icon|safe if sort == "pid"}}
                     </th>
                     <th>
-                        <a href="{{ url_for(".processes", sort="name", order=next_order) }}">Name</a>
+                        <a href="{{ url_for(".processes", hostname=hostname, sort="name", order=next_order) }}">Name</a>
                         {{ order_icon|safe if sort == "name"}}
                     </th>
                     <th>
-                        <a href="{{ url_for(".processes", sort="username", order=next_order) }}">User</a>
+                        <a href="{{ url_for(".processes", hostname=hostname, sort="username", order=next_order) }}">User</a>
                         {{ order_icon|safe if sort == "username"}}
                     </th>
                     <th>
-                        <a href="{{ url_for(".processes", sort="status", order=next_order) }}">Status</a>
+                        <a href="{{ url_for(".processes", hostname=hostname, sort="status", order=next_order) }}">Status</a>
                         {{ order_icon|safe if sort == "status"}}
                     </th>
                     <th>
-                        <a href="{{ url_for(".processes", sort="created", order=next_order) }}">Created</a>
+                        <a href="{{ url_for(".processes", hostname=hostname, sort="created", order=next_order) }}">Created</a>
                         {{ order_icon|safe if sort == "created"}}
                     </th>
                     <th title="Resident Set Size">
-                        <a href="{{ url_for(".processes", sort="rss", order=next_order) }}">RSS</a>
+                        <a href="{{ url_for(".processes", hostname=hostname, sort="rss", order=next_order) }}">RSS</a>
                         {{ order_icon|safe if sort == "rss"}}
                     </th>
                     <th title="Virtual Memory Size">
-                        <a href="{{ url_for(".processes", sort="vms", order=next_order) }}">VMS</a>
+                        <a href="{{ url_for(".processes", hostname=hostname, sort="vms", order=next_order) }}">VMS</a>
                         {{ order_icon|safe if sort == "vms"}}
                     </th>
                     <th>
-                        <a href="{{ url_for(".processes", sort="memory", order=next_order) }}">Memory %</a>
+                        <a href="{{ url_for(".processes", hostname=hostname, sort="memory", order=next_order) }}">Memory %</a>
                         {{ order_icon|safe if sort == "memory"}}
                     </th>
                     <th>
-                        <a href="{{ url_for(".processes", sort="cpu", order=next_order) }}">CPU %</a>
+                        <a href="{{ url_for(".processes", hostname=hostname, sort="cpu", order=next_order) }}">CPU %</a>
                         {{ order_icon|safe if sort == "cpu"}}
                     </th>
                 </tr>
