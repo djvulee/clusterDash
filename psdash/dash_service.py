@@ -184,7 +184,7 @@ def WrapService(net_io_counters, logs):
                     "page": "overview",
             }
 
-            return copy.deepcopy(data)
+            return data
 
         def exposed_get_logs(self):
             available_logs = []
