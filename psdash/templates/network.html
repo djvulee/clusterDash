@@ -61,7 +61,7 @@
                     </td>
                     <td>
                         {% if c.pid %}
-                            <a href="{{ url_for(".process", pid=c.pid) }}">{{ c.pid }}</a>
+                            <a href="{{ url_for(".process", hostname=hostname, pid=c.pid) }}">{{ c.pid }}</a>
                         {% else %}
                             -
                         {% endif %}
