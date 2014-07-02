@@ -40,7 +40,7 @@ class Client():
             return "error"
 
         con = self.conns[hostname]
-        process = pickle.loads(con.root.get_process(pid, section))
+        process = con.root.get_process(pid, section)
 
         return process
 

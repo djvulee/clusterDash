@@ -132,7 +132,7 @@ def WrapService(net_io_counters, logs):
             if section == "environment":
                 context["process_environ"] = self.get_process_environ(pid)
 
-            return  pickle.dumps(context)
+            return  context
 
         def get_user(self):
             users = []
@@ -147,7 +147,7 @@ def WrapService(net_io_counters, logs):
 
                 users.append(user)
 
-            return pickle.dumps(users)
+            return users
 
 
         def get_network_interface(self):
