@@ -46,7 +46,7 @@ def WrapService(net_io_counters, logs):
             return pickle.dumps((disk, io_counters))
 
         def exposed_get_network(self):
-            netifs = self.exposed_get_network_interface()
+            netifs = self.get_network_interface()
             netifs.sort(key=lambda x: x.get("bytes_sent"), reverse=True)
 
             conns = psutil.net_connections()
@@ -150,14 +150,14 @@ def WrapService(net_io_counters, logs):
             return pickle.dumps(users)
 
 
-        def exposed_get_network_interface(self):
+        def get_network_interface(self):
             io_counters = net_io_counters.get()
             addresses = get_interface_addresses()
 
             for inf in addresses:
                 inf.update(io_counters.get(inf["name"], {}))
 
-            return pickle.dumps(addresses)
+            return addresses
 
         def exposed_get_overview(self):
             load_avg = os.getloadavg()
@@ -165,7 +165,7 @@ def WrapService(net_io_counters, logs):
             disks = self.get_disk()
             users = self.exposed_get_user()
 
-            netifs = self.exposed_get_network_interface()
+            netifs = self.get_network_interface()
             netifs.sort(key=lambda x: x.get("bytes_sent"), reverse=True)
 
             data = {
