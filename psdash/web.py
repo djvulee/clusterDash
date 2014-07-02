@@ -186,7 +186,7 @@ def processes(hostname, sort="pid", order="asc"):
 
 @psdashapp.route("/<string:hostname>/process/<int:pid>/limits")
 def process_limits(hostname, pid):
-    (limits, p) = dash_client.get_process_limits(hostname)
+    (limits, p) = dash_client.get_hostname_process_limits(hostname, pid)
 
     return render_template(
         "process/limits.html",

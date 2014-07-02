@@ -26,12 +26,12 @@ class Client():
 
         return processes
 
-    def get_hostname_process_limits(self, hostname):
+    def get_hostname_process_limits(self, hostname, pid):
         if hostname not in self.conns.keys():
             return "error"
 
         con = self.conns[hostname]
-        process_limits = pickle.loads(con.root.get_process_limits())
+        process_limits = pickle.loads(con.root.get_process_limits(pid))
 
         return process_limits
 

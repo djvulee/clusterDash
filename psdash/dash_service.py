@@ -86,7 +86,7 @@ def WrapService(net_io_counters, logs):
             return pickle.dumps(procs)
 
 
-        def exposed_get_process_limits(self):
+        def exposed_get_process_limits(self, pid):
             p = psutil.Process(pid)
 
             limits = {
