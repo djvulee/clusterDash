@@ -16,7 +16,6 @@ from net import NetIOCounters, get_interface_addresses
 
 from client import Client
 
-import collections
 
 logs = Logs()
 
@@ -29,7 +28,11 @@ def socket_constants(prefix):
 socket_families = socket_constants('AF_')
 socket_types = socket_constants('SOCK_')
 
-hostnames = [["husky002", 5050], ["husky003", 5050]]
+with open("slaves", "r") as fr:
+    slaves = fr.read().splitlines()
+
+
+hostnames = [ [slave, 5050] for slave in slaves ]
 dash_client = Client(hostnames)
 
 app = Flask(__name__)
@@ -342,6 +345,7 @@ def enable_verbose_logging():
 
 
 def main():
+
     setup_logging()
 
     locale.setlocale(locale.LC_ALL, "")
