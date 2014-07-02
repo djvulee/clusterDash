@@ -1,11 +1,18 @@
-# Clusterdash
+# ClusterDash
 
-ClusterDash is based on the psdash repo, but it support a cluster of machine, this is benefir for distributed system monitor
+ClusterDash is based on the psdash [repo](https://github.com/Jahaja/psdash), but it supports a cluster of machine, this is benefit for distributed system monitor, clusterDash use the Rpyc to collect the remote machine state.
 
 
-### The following is the psdash info
+### usage
+* install the clusterDash in every machine you want to monitor
+* fill the hostname of the machine you want to monitor in the slave file
+* start the monitor at every machine using: python server.py --log /var/log/metrics.log &
+* star the client on one of the machine(which will collect all the info you need) : python web.py --log /var/log/client.log &
+* typing the following url in your web browser, and you will see all the system metrics.(cpu, network, disks etc)
 
-psdash is a system information web dashboard for linux using data mainly served by [psutil](https://code.google.com/p/psutil/) - hence the name.
+
+
+#### The following info is about psdash, clusterDash is based on psdash, so it support all the following metrics.
 
 Features includes:
 * **Overview**<br>
