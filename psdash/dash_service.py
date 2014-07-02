@@ -108,7 +108,10 @@ def WrapService(net_io_counters, logs):
                 "RLIMIT_STACK": p.rlimit(psutil.RLIMIT_STACK)
             }
 
-            return pickle.dumps((limits, p))
+            ser_limits = pickle.dumps(limits)
+            ser_p = pickle.dumps(p)
+
+            return (ser_limits, ser_p)
 
         def exposed_get_process(self, pid, section):
             valid_sections = [
