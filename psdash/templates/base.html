@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>psDash - Linux system dashboard</title>
+    <title>clusterDash - Linux system dashboard</title>
     <link href="{{ url_for(".static", filename="css/bootstrap.min.css") }}" rel="stylesheet">
     <link href="{{ url_for(".static", filename="css/dashboard.css") }}" rel="stylesheet">
   </head>
@@ -12,13 +12,13 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="{{ url_for(".index", hostname=hostname) }}">psDash</a>
+          <a class="navbar-brand" href="{{ url_for(".index", hostname=hostname) }}">clusterDash</a>
         </div>
         <p class="navbar-text navbar-right"><span class="glyphicon glyphicon-refresh"></span> Auto-updating (every 3 sec)</p>
       </div>
     </div>
 
-    <div id="psdash" class="container-fluid">
+    <div id="clusterDash" class="container-fluid">
         <div class="row">
             <div class="col-sm-3 col-md-1 sidebar">
                 <ul class="nav nav-sidebar">
@@ -34,9 +34,11 @@
                   <li {% if page == "disks" %}class="active"{% endif %}>
                       <a href="{{ url_for(".view_disks", hostname=hostname) }}"><span class="glyphicon glyphicon-hdd"></span> Disks</a>
                   </li>
+                  <!-- comment 
                   <li {% if page == "logs" %}class="active"{% endif %}>
                       <a href="{{ url_for(".view_logs") }}"><span class="glyphicon glyphicon-book"></span> Logs</a>
                   </li>
+                  -->
                 </ul>
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-1 main">
