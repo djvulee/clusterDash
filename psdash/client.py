@@ -13,7 +13,7 @@ class Client():
         self.conns = {}
         for server in self.server_params:
             c = rpyc.connect(server[0], server[1])
-            if server[0] no in self.conns.keys():
+            if server[0] not in self.conns.keys():
                 self.conns[server[0]]= c
 
     def get_hostname_processes(self, hostname):

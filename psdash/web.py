@@ -29,9 +29,8 @@ def socket_constants(prefix):
 socket_families = socket_constants('AF_')
 socket_types = socket_constants('SOCK_')
 
-
-dash_client = Client([["husky003", 5050]])
-
+hostnames = [["husky002", 5050], ["husky003", 5050]]
+dash_client = Client(hostnames)
 
 app = Flask(__name__)
 app.config.from_envvar("PSDASH_CONFIG", silent=True)
@@ -145,6 +144,28 @@ def access_denied(e):
     errmsg = "No process with pid %d was found." % e.pid
     return render_template("error.html", error=errmsg), 401
 
+@psdashapp.route("/")
+def xxxxxindex():
+    tmp = dash_client.get_hostname_overview(hostnames[0][0])
+
+    data = {
+        "os": tmp["os"],
+        "hostname": tmp["hostname"],
+        "uptime": tmp["uptime"],
+        "load_avg": tmp["load_avg"],
+        "cpus": tmp["cpus"],
+        "vmem": tmp["vmem"],
+        "swap": tmp["swap"],
+        "disks": tmp["disks"],
+        "cpu_percent": tmp["cpu_percent"],
+        "users": tmp["users"],
+        "net_interfaces": tmp["net_interfaces"],
+        "page": "overview",
+        "is_xhr": request.is_xhr
+    }
+
+    return render_template("index.html", **data)
+
 
 @psdashapp.route("/<string:hostname>")
 def index(hostname):
@@ -180,6 +201,7 @@ def processes(hostname, sort="pid", order="asc"):
         sort=sort,
         order=order,
         page="processes",
+        hostname=hostname,
         is_xhr=request.is_xhr
     )
 
@@ -210,6 +232,7 @@ def process(hostname, pid, section):
             "process": tmp_context["process"],
             "section": tmp_context["section"],
             "page": "processes",
+            "hostname": hostname,
             "is_xhr": request.is_xhr
         }
         if section == "environment":
@@ -227,12 +250,13 @@ def view_networks(hostname):
         net_connections=conns,
         socket_families=socket_families,
         socket_types=socket_types,
+        hostname=hostname
         is_xhr=request.is_xhr
     )
 
 
 @psdashapp.route("/<string:hostname>/disks")
-def view_disks():
+def view_disks(hostname):
     (disks, io_counters) = dash_client.get_hostname_disk(hostname)
 
     return render_template(
