@@ -243,6 +243,7 @@ def view_disks(hostname):
         page="disks",
         disks=disks,
         io_counters=io_counters,
+        hostname=hostname,
         is_xhr=request.is_xhr
     )
 
