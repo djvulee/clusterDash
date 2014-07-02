@@ -1,6 +1,7 @@
 # coding=utf-8
 
 import rpyc
+import marshal
 
 
 class Client():
@@ -23,7 +24,8 @@ class Client():
         con = self.conns[hostname]
         processes = con.root.get_processes(sort, order)
 
-        return processes
+        result = marshal.load(processes)
+        return result
 
     def get_hostname_process_limits(self, hostname):
         if hostname not in self.conns.keys():

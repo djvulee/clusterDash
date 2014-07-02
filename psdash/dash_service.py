@@ -18,6 +18,7 @@ import os
 import platform
 
 import copy
+import marshal
 
 
 
@@ -85,7 +86,8 @@ def WrapService(net_io_counters, logs):
                 reverse=True if order != "asc" else False
             )
 
-            return procs
+            result = marshal.dumps(procs)
+            return result
 
         def exposed_get_process_limits(self):
             p = psutil.Process(pid)
