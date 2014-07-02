@@ -22,17 +22,16 @@ class Client():
             return "error"
 
         con = self.conns[hostname]
-        processes = con.root.get_processes(sort, order)
+        processes = marshal.loads(con.root.get_processes(sort, order))
 
-        result = marshal.load(processes)
-        return result
+        return processes
 
     def get_hostname_process_limits(self, hostname):
         if hostname not in self.conns.keys():
             return "error"
 
         con = self.conns[hostname]
-        process_limits = con.root.get_process_limits()
+        process_limits = marshal.loads(con.root.get_process_limits())
 
         return process_limits
 
@@ -41,7 +40,7 @@ class Client():
             return "error"
 
         con = self.conns[hostname]
-        process = con.root.get_process(pid, section)
+        process = marshal.loads(con.root.get_process(pid, section))
 
         return process
 
@@ -50,44 +49,27 @@ class Client():
             return "error"
 
         con = self.conns[hostname]
-        disk = con.root.get_disk()
+        disk = marshal.loads(con.root.get_disk())
 
         return disk
 
-    def get_hostname_cpu(self, hostname):
-        if hostname not in self.conns.keys():
-            return "error"
-
-        con = self.conns[hostname]
-        cpu = con.root.get_cpu()
-
-        return cpu
 
     def get_hostname_network(self, hostname):
         if hostname not in self.conns.keys():
             return "error"
 
         con = self.conns[hostname]
-        net = con.root.get_network()
+        net = marshal.loads(con.root.get_network())
 
         return net
 
-
-    def get_hostname_mem(self, hostname):
-        if hostname not in self.conns.keys():
-            return "error"
-
-        con = self.conns[hostname]
-        mem = con.root.get_mem()
-
-        return mem
 
     def get_hostname_overview(self, hostname):
         if hostname not in self.conns.keys():
             return "error"
 
         con = self.conns[hostname]
-        overview = con.root.get_overview()
+        overview = marshal.loads(con.root.get_overview())
 
         return overview
 

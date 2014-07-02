@@ -43,10 +43,7 @@ def WrapService(net_io_counters, logs):
             io_counters = psutil.disk_io_counters(perdisk=True).items()
             io_counters.sort(key=lambda x: x[1].read_count, reverse=True)
 
-            return (disk, io_counters)
-
-        def exposed_get_cpu(self):
-            pass
+            return marshal.dumps((disk, io_counters))
 
         def exposed_get_network(self):
             netifs = self.exposed_get_network_interface()
@@ -55,7 +52,7 @@ def WrapService(net_io_counters, logs):
             conns = psutil.net_connections()
             conns.sort(key=lambda x: x.status)
 
-            return (netifs, conns)
+            return marshal.dumps((netifs, conns))
 
         def exposed_get_processes(self, sort, order):
             procs = []
@@ -86,8 +83,8 @@ def WrapService(net_io_counters, logs):
                 reverse=True if order != "asc" else False
             )
 
-            result = marshal.dumps(procs)
-            return result
+            return marshal.dumps(procs)
+
 
         def exposed_get_process_limits(self):
             p = psutil.Process(pid)
@@ -111,7 +108,7 @@ def WrapService(net_io_counters, logs):
                 "RLIMIT_STACK": p.rlimit(psutil.RLIMIT_STACK)
             }
 
-            return (limits, p)
+            return marshal.dumps((limits, p))
 
         def exposed_get_process(self, pid, section):
             valid_sections = [
@@ -135,7 +132,7 @@ def WrapService(net_io_counters, logs):
             if section == "environment":
                 context["process_environ"] = self.get_process_environ(pid)
 
-            return  context
+            return  marshal.dumps(context)
 
         def exposed_get_user(self):
             users = []
@@ -150,17 +147,17 @@ def WrapService(net_io_counters, logs):
 
                 users.append(user)
 
-            return users
+            return marshal.dumps(users)
+
 
         def exposed_get_network_interface(self):
-            #net_io_counters = NetIOCounters()
             io_counters = net_io_counters.get()
             addresses = get_interface_addresses()
 
             for inf in addresses:
                 inf.update(io_counters.get(inf["name"], {}))
 
-            return addresses
+            return marshal.dumps(addresses)
 
         def exposed_get_overview(self):
             load_avg = os.getloadavg()
@@ -186,7 +183,8 @@ def WrapService(net_io_counters, logs):
                     "page": "overview",
             }
 
-            return data
+            return marshal.dumps(data)
+
 
         def exposed_get_logs(self):
             available_logs = []
