@@ -1,4 +1,9 @@
-# psdash
+# Clusterdash
+
+ClusterDash is based on the psdash repo, but it support a cluster of machine, this is benefir for distributed system monitor
+
+
+### The following is the psdash info
 
 psdash is a system information web dashboard for linux using data mainly served by [psutil](https://code.google.com/p/psutil/) - hence the name.
 
@@ -79,23 +84,6 @@ e.g: `PSDASH_ALLOWED_REMOTE_ADDRESSES = "10.0.0.2, 192.29.20.2"`
 This can be used to make psdash serve from a non-root location.
 
 e.g: `PSDASH_URL_PREFIX = "/psdash"` would make psdash serve it's pages from /psdash
-
-## Screenshots
-
-Overview:
-![Overview](docs/screenshots/overview.png)
-Listing processes:
-![Processes](docs/screenshots/processes.png)
-Overview of a process:
-![Process overview](docs/screenshots/process_overview.png)
-Connections of a process:
-![Process connections](docs/screenshots/process_connections.png)
-Network interfaces:
-![Network](docs/screenshots/network.png)
-Tailing a log:
-![Log](docs/screenshots/log.png)
-Searching a log:
-![Log search](docs/screenshots/log_search.png)
 
 ## License
 Released under CC0 (Public Domain Dedication).
