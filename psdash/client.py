@@ -10,75 +10,84 @@ class Client():
         else:
             self.server_params = [["localhost", "5050"]]
 
-        self.conns = []
+        self.conns = {}
         for server in self.server_params:
             c = rpyc.connect(server[0], server[1])
-            self.conns.append(c)
+            if server[0] no in self.conns.keys():
+                self.conns[server[0]]= c
 
-    def get_processes(self):
-        processes = []
-        for con in self.conns:
-            process = con.root.get_processes()
-            processes.append(process)
+    def get_hostname_processes(self, hostname):
+        if hostname not in self.conn.keys():
+            return "error"
+
+        con = self.conns[hostname]
+        processes = con.root.get_processes()
 
         return processes
 
-    def get_process_limits(self):
-        process_limits = []
-        for con in self.conns:
-            process_limit = con.root.get_process_limits()
-            process_limits.append(process_limit)
+    def get_hostname_process_limits(self, hostname):
+        if hostname not in self.conn.keys():
+            return "error"
+
+        con = self.conns[hostname]
+        process_limits = con.root.get_process_limits()
 
         return process_limits
 
-    def get_process(self, pid, section):
-        sec_processes = []
-        for con in self.conns:
-            sec_process = con.root.get_process(pid, section)
-            sec_processes.append(sec_process)
+    def get_hostname_process(self, hostname, pid, section):
+        if hostname not in self.conn.keys():
+            return "error"
 
-        return sec_processes
+        con = self.conns[hostname]
+        process = con.root.get_process(pid, section)
 
-    def get_disks(self):
-        disks = []
-        for con in self.conns:
-            disk = con.root.get_disk()
-            disks.append(disk)
+        return process
 
-        return disks
+    def get_hostname_disk(self, hostname):
+        if hostname not in self.conns.keys():
+            return "error"
 
-    def get_cpus(self):
-        cpus = []
-        for con in self.conns:
-            cpu = con.root.get_cpu()
-            cpus.append(cpu)
+        con = self.conns[hostname]
+        disk = con.root.get_disk()
 
-        return cpus
+        return disk
 
-    def get_networks(self):
-        nets = []
-        for con in self.conns:
-            net = con.root.get_network()
-            nets.append(net)
+    def get_hostname_cpu(self, hostname):
+        if hostname not in self.conns.keys():
+            return "error"
 
-        return nets
+        con = self.conns[hostname]
+        cpu = con.root.get_cpu()
 
-    def get_mems(self):
-        mems = []
-        for con in self.conns:
-            mem = con.root.get_mem()
-            mems.append(mem)
+        return cpu
 
-        return mems
+    def get_hostname_network(self, hostname):
+        if hostname not in self.conns.keys():
+            return "error"
 
-    def get_overviews(self):
-        overviews = []
+        con = self.conns[hostname]
+        net = con.root.get_network()
 
-        for con in self.conns:
-            overview = con.root.get_overview()
-            overviews.append(overview)
+        return net
 
-        return overviews
+
+    def get_hostname_mem(self, hostname):
+        if hostname not in self.conns.keys():
+            return "error"
+
+        con = self.conns[hostname]
+        mem = con.root.get_mem()
+
+        return mem
+
+    def get_hostname_overview(self, hostname):
+        if hostname not in self.conns.keys():
+            return "error"
+
+        con = self.conns[hostname]
+        overview = con.root.get_overview()
+
+        return overview
 
     def get_logs(self):
         logs = []
@@ -126,8 +135,8 @@ class Client():
         return search_logs
 
     def stop(self):
-        for con in self.conns:
-            con.close()
+        for key in self.conns.keys():
+            self.conns[key].close()
 
 
 if __name__ == "__main__":
