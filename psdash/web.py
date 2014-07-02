@@ -144,28 +144,6 @@ def access_denied(e):
     errmsg = "No process with pid %d was found." % e.pid
     return render_template("error.html", error=errmsg), 401
 
-@psdashapp.route("/")
-def xxxxxindex():
-    tmp = dash_client.get_hostname_overview(hostnames[0][0])
-
-    data = {
-        "os": tmp["os"],
-        "hostname": tmp["hostname"],
-        "uptime": tmp["uptime"],
-        "load_avg": tmp["load_avg"],
-        "cpus": tmp["cpus"],
-        "vmem": tmp["vmem"],
-        "swap": tmp["swap"],
-        "disks": tmp["disks"],
-        "cpu_percent": tmp["cpu_percent"],
-        "users": tmp["users"],
-        "net_interfaces": tmp["net_interfaces"],
-        "page": "overview",
-        "is_xhr": request.is_xhr
-    }
-
-    return render_template("index.html", **data)
-
 
 @psdashapp.route("/<string:hostname>")
 def index(hostname):
