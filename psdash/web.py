@@ -146,12 +146,9 @@ def access_denied(e):
     return render_template("error.html", error=errmsg), 401
 
 
-@psdashapp.route("/")
-def index():
-    tmp = dash_client.get_overviews()[0]
-
-    #the following is the right thing, we should get all the info
-    #tmp = dash_client.get_overviews()
+@psdashapp.route("/<string:hostname>")
+def index(hostname):
+    tmp = dash_client.get_hostname_overview(hostname)
 
     data = {
         "os": tmp["os"],
@@ -171,11 +168,11 @@ def index():
 
     return render_template("index.html", **data)
 
-@psdashapp.route("/processes", defaults={"sort": "cpu", "order": "desc"})
-@psdashapp.route("/processes/<string:sort>")
-@psdashapp.route("/processes/<string:sort>/<string:order>")
-def processes(sort="pid", order="asc"):
-    (procs, sort, order) = dash_client.get_processes()[0]
+@psdashapp.route("/<string:hostname>/processes", defaults={"sort": "cpu", "order": "desc"})
+@psdashapp.route("/<string:hostname>/processes/<string:sort>")
+@psdashapp.route("/<string:hostname>/processes/<string:sort>/<string:order>")
+def processes(hostname, sort="pid", order="asc"):
+    processes  = dash_client.get_hostname_processes(hostname)
 
     return render_template(
         "processes.html",
@@ -186,9 +183,10 @@ def processes(sort="pid", order="asc"):
         is_xhr=request.is_xhr
     )
 
-@psdashapp.route("/process/<int:pid>/limits")
-def process_limits(pid):
-    (limits, p) = dash_client.get_process_limits()[0]
+
+@psdashapp.route("/<string:hostname>/process/<int:pid>/limits")
+def process_limits(hostname, pid):
+    (limits, p) = dash_client.get_process_limits(hostname)
 
     return render_template(
         "process/limits.html",
@@ -199,10 +197,10 @@ def process_limits(pid):
         is_xhr=request.is_xhr
     )
 
-@psdashapp.route("/process/<int:pid>", defaults={"section": "overview"})
-@psdashapp.route("/process/<int:pid>/<string:section>")
-def process(pid, section):
-    tmp_context = dash_client.get_process(pid, section)[0]
+@psdashapp.route("/<string:hostname>/process/<int:pid>", defaults={"section": "overview"})
+@psdashapp.route("/<string:hostname>/process/<int:pid>/<string:section>")
+def process(hostname, pid, section):
+    tmp_context = dash_client.get_hostname_process(hostname, pid, section)
 
     if tmp_context == "error":
         errmsg = "Invalid subsection when trying to view process %d" % pid
@@ -218,9 +216,9 @@ def process(pid, section):
             context["process_environ"] = tmp_context["process_environ"]
         return render_template("process/%s.html" % section, **context)
 
-@psdashapp.route("/network")
-def view_networks():
-    (netifs, conns) = dash_client.get_networks()[0]
+@psdashapp.route("/<string:hostname>/network")
+def view_networks(hostname):
+    (netifs, conns) = dash_client.get_hostname_network(hostname)
 
     return render_template(
         "network.html",
@@ -233,9 +231,9 @@ def view_networks():
     )
 
 
-@psdashapp.route("/disks")
+@psdashapp.route("/<string:hostname>/disks")
 def view_disks():
-    (disks, io_counters) = dash_client.get_disks()[0]
+    (disks, io_counters) = dash_client.get_hostname_disk(hostname)
 
     return render_template(
         "disks.html",
