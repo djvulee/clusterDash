@@ -134,7 +134,7 @@ def WrapService(net_io_counters, logs):
 
             return  pickle.dumps(context)
 
-        def exposed_get_user(self):
+        def get_user(self):
             users = []
             for u in psutil.users():
                 dt = datetime.fromtimestamp(u.started)
@@ -163,7 +163,7 @@ def WrapService(net_io_counters, logs):
             load_avg = os.getloadavg()
             uptime = datetime.now() - datetime.fromtimestamp(psutil.boot_time())
             disks = self.get_disk()
-            users = self.exposed_get_user()
+            users = self.get_user()
 
             netifs = self.get_network_interface()
             netifs.sort(key=lambda x: x.get("bytes_sent"), reverse=True)
