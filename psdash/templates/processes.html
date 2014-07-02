@@ -53,7 +53,7 @@
                 {% for p in processes %}
                     <tr>
                       <td>{{ p.pid }}</td>
-                      <td title="{{ p.cmdline }}"><a href="{{ url_for(".process", pid=p.pid) }}">{{ p.name }}</a></td>
+                      <td title="{{ p.cmdline }}"><a href="{{ url_for(".process", hostname=hostname, pid=p.pid) }}">{{ p.name }}</a></td>
                       <td>{{ p.username }}</td>
                       <td>{{ p.status }}</td>
                       <td>{{ p.created }}</td>

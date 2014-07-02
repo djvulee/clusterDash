@@ -197,7 +197,7 @@ def processes(hostname, sort="pid", order="asc"):
 
     return render_template(
         "processes.html",
-        processes=procs,
+        processes=processes,
         sort=sort,
         order=order,
         page="processes",
@@ -250,7 +250,7 @@ def view_networks(hostname):
         net_connections=conns,
         socket_families=socket_families,
         socket_types=socket_types,
-        hostname=hostname
+        hostname=hostname,
         is_xhr=request.is_xhr
     )
 

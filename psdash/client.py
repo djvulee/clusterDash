@@ -17,7 +17,7 @@ class Client():
                 self.conns[server[0]]= c
 
     def get_hostname_processes(self, hostname):
-        if hostname not in self.conn.keys():
+        if hostname not in self.conns.keys():
             return "error"
 
         con = self.conns[hostname]
@@ -26,7 +26,7 @@ class Client():
         return processes
 
     def get_hostname_process_limits(self, hostname):
-        if hostname not in self.conn.keys():
+        if hostname not in self.conns.keys():
             return "error"
 
         con = self.conns[hostname]
@@ -35,7 +35,7 @@ class Client():
         return process_limits
 
     def get_hostname_process(self, hostname, pid, section):
-        if hostname not in self.conn.keys():
+        if hostname not in self.conns.keys():
             return "error"
 
         con = self.conns[hostname]
