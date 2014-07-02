@@ -18,7 +18,7 @@ import os
 import platform
 
 import copy
-import marshal
+import pickle
 
 
 
@@ -43,7 +43,7 @@ def WrapService(net_io_counters, logs):
             io_counters = psutil.disk_io_counters(perdisk=True).items()
             io_counters.sort(key=lambda x: x[1].read_count, reverse=True)
 
-            return marshal.dumps((disk, io_counters))
+            return pickle.dumps((disk, io_counters))
 
         def exposed_get_network(self):
             netifs = self.exposed_get_network_interface()
@@ -52,7 +52,7 @@ def WrapService(net_io_counters, logs):
             conns = psutil.net_connections()
             conns.sort(key=lambda x: x.status)
 
-            return marshal.dumps((netifs, conns))
+            return pickle.dumps((netifs, conns))
 
         def exposed_get_processes(self, sort, order):
             procs = []
@@ -83,7 +83,7 @@ def WrapService(net_io_counters, logs):
                 reverse=True if order != "asc" else False
             )
 
-            return marshal.dumps(procs)
+            return pickle.dumps(procs)
 
 
         def exposed_get_process_limits(self):
@@ -108,7 +108,7 @@ def WrapService(net_io_counters, logs):
                 "RLIMIT_STACK": p.rlimit(psutil.RLIMIT_STACK)
             }
 
-            return marshal.dumps((limits, p))
+            return pickle.dumps((limits, p))
 
         def exposed_get_process(self, pid, section):
             valid_sections = [
@@ -132,7 +132,7 @@ def WrapService(net_io_counters, logs):
             if section == "environment":
                 context["process_environ"] = self.get_process_environ(pid)
 
-            return  marshal.dumps(context)
+            return  pickle.dumps(context)
 
         def exposed_get_user(self):
             users = []
@@ -147,7 +147,7 @@ def WrapService(net_io_counters, logs):
 
                 users.append(user)
 
-            return marshal.dumps(users)
+            return pickle.dumps(users)
 
 
         def exposed_get_network_interface(self):
@@ -157,7 +157,7 @@ def WrapService(net_io_counters, logs):
             for inf in addresses:
                 inf.update(io_counters.get(inf["name"], {}))
 
-            return marshal.dumps(addresses)
+            return pickle.dumps(addresses)
 
         def exposed_get_overview(self):
             load_avg = os.getloadavg()
@@ -183,7 +183,7 @@ def WrapService(net_io_counters, logs):
                     "page": "overview",
             }
 
-            return marshal.dumps(data)
+            return pickle.dumps(data)
 
 
         def exposed_get_logs(self):

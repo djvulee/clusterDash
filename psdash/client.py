@@ -1,7 +1,7 @@
 # coding=utf-8
 
 import rpyc
-import marshal
+import pickle
 
 
 class Client():
@@ -22,7 +22,7 @@ class Client():
             return "error"
 
         con = self.conns[hostname]
-        processes = marshal.loads(con.root.get_processes(sort, order))
+        processes = pickle.loads(con.root.get_processes(sort, order))
 
         return processes
 
@@ -31,7 +31,7 @@ class Client():
             return "error"
 
         con = self.conns[hostname]
-        process_limits = marshal.loads(con.root.get_process_limits())
+        process_limits = pickle.loads(con.root.get_process_limits())
 
         return process_limits
 
@@ -40,7 +40,7 @@ class Client():
             return "error"
 
         con = self.conns[hostname]
-        process = marshal.loads(con.root.get_process(pid, section))
+        process = pickle.loads(con.root.get_process(pid, section))
 
         return process
 
@@ -49,7 +49,7 @@ class Client():
             return "error"
 
         con = self.conns[hostname]
-        disk = marshal.loads(con.root.get_disk())
+        disk = pickle.loads(con.root.get_disk())
 
         return disk
 
@@ -59,7 +59,7 @@ class Client():
             return "error"
 
         con = self.conns[hostname]
-        net = marshal.loads(con.root.get_network())
+        net = pickle.loads(con.root.get_network())
 
         return net
 
@@ -69,7 +69,7 @@ class Client():
             return "error"
 
         con = self.conns[hostname]
-        overview = marshal.loads(con.root.get_overview())
+        overview = pickle.loads(con.root.get_overview())
 
         return overview
 
