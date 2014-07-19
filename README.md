@@ -1,6 +1,6 @@
 # ClusterDash
 
-ClusterDash is based on the psdash [repo](https://github.com/Jahaja/psdash), but it supports a cluster of machine, this is benefit for distributed system monitor, clusterDash use the Rpyc [repo](https://github.com/tomerfiliba/rpyc) to collect the remote machine state.
+ClusterDash is based on the [psdash](https://github.com/Jahaja/psdash) repo, but it supports a cluster of machine, this is benefit for distributed system monitor, clusterDash use the [Rpyc](https://github.com/tomerfiliba/rpyc) to collect the remote machine state.
 
 
 ### usage
