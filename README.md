@@ -1,6 +1,6 @@
 # ClusterDash
 
-ClusterDash is based on the psdash [repo](https://github.com/Jahaja/psdash), but it supports a cluster of machine, this is benefit for distributed system monitor, clusterDash use the Rpyc to collect the remote machine state.
+ClusterDash is based on the psdash [repo](https://github.com/Jahaja/psdash), but it supports a cluster of machine, this is benefit for distributed system monitor, clusterDash use the Rpyc [repo](https://github.com/tomerfiliba/rpyc) to collect the remote machine state.
 
 
 ### usage
@@ -8,7 +8,7 @@ ClusterDash is based on the psdash [repo](https://github.com/Jahaja/psdash), but
 * fill the hostname of the machine you want to monitor in the slave file
 * start the monitor at every machine using: python server.py --log /var/log/metrics.log &
 * star the client on one of the machine(which will collect all the info you need) : python web.py --log /var/log/client.log &
-* typing the following url in your web browser, and you will see all the system metrics.(cpu, network, disks etc)
+* typing the following url in your web browser, and you will see all the system metrics.(cpu, network, disks etc). Take for example: if you set the husky004 as the master, and husky002, husky003 as the machine you want to monitor, you just need to type the following url to see the status of husky002: http://husky004:5000/husky002
 
 
 
